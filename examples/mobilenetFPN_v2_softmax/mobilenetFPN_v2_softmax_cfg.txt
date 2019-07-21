@@ -1,0 +1,63 @@
+{
+  "first_net_cfg":
+  {
+    "proto_txt_file": "examples/mobilenetFPN_v2_softmax/converted_model_stage1-convert.prototxt",
+    "model_param_file": "examples/mobilenetFPN_v2_softmax/converted_model_stage1-convert.caffemodel",
+    "rpn_input_blob_names": ["500", "504", "508", "512", "516", "499", "503", "507", "511", "515"],
+    "rpn_feature_level_num": 5,
+    "rcnn_input_blob_names": ["490", "492", "494", "482"],
+    "rcnn_feature_level_num": 4
+  },
+  "second_net_cfg":
+  {
+    "proto_txt_file": "examples/mobilenetFPN_v2_softmax/converted_model_stage2.prototxt",
+    "model_param_file": "examples/mobilenetFPN_v2_softmax/converted_model_stage2.caffemodel",
+    "bbox_class_names": ["15", "cls_prob"]
+  },
+  "rpn_head_cfg":
+  {
+    "num_classes": 2,
+    "in_channels": 32,
+    "feat_channels": 32,
+    "use_sigmoid_cls": false,
+    "use_focal_loss": false,
+    "anchor_base_sizes": "",
+    "anchor_scales": [8],
+    "anchor_ratios": [0.5, 1.0, 2.0],
+    "anchor_strides": [4, 8, 16, 32, 64],
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [1.0, 1.0, 1.0, 1.0]
+  },
+  "rpn_proposal_cfg":
+  {
+    "nms_pre": 2000,
+    "nms_post": 2000,
+    "nms_thr": 0.7,
+    "max_num": 2000,
+    "min_bbox_size": 0.0,
+    "nms_across_levels": true,
+    "nms_only_across_levels": false
+  },
+  "rcnn_head_cfg":
+  {
+    "roi_cfg":
+    {
+      "type": "roi_align",
+      "pooled_h": 7,
+      "pooled_w": 7,
+      "sample_num": 2,
+      "featmap_strides": [4, 8, 16, 32],
+      "use_single_level": true,
+      "finest_scale": 56.0
+    },
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [0.1, 0.1, 0.2, 0.2]
+  },
+  "rcnn_proposal_cfg":
+  {
+    "score_thr": 0.8,
+    "iou_thr": 0.3,
+    "per_img_bbox_max_num": 100,
+    "min_bbox_size": 0.0
+  }
+}

@@ -1,0 +1,31 @@
+create detector time,    inference time,    single_test_num: 40
+0.239958  4.95266
+0.237936  4.93167
+0.278851  5.10791
+0.224781  5.07826
+0.291873  5.11117
+0.320172  5.70773
+0.255904  5.06633
+0.262994  5.31352
+0.301618  5.09701
+0.302  5.04018
+create detector average time: 0.271609 inference average time: 5.14064 fps: 7.78113
+
+create detector time,    inference time,    single_test_num: 40
+0.382768  9.57524
+0.256653  9.44547
+0.262568  9.9428
+0.242108  9.78273
+0.264056  9.47389
+0.282583  9.39413
+0.276695  9.6488
+0.345111  9.60833
+0.407437  9.61732
+0.305579  9.5193
+create detector average time: 0.302556 inference average time: 9.6008 fps: 4.16632
+
+
+
+
+
+

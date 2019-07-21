@@ -1,0 +1,57 @@
+{
+  "all_in_one": false,
+  "det_type": "two-stage",
+
+  "to_rgb": true,
+  "flip": false,
+  "size_divisor": 32,
+
+  "scale": [240, 320],
+  "resize_keep_ratio": true,
+  "inputimage_format": "bgr",
+  "image_mean": [123.675, 116.28, 103.53],
+  "image_std": [58.395, 57.12, 57.375],
+
+  "anchor_scales": [4],
+  "anchor_ratios": [0.5, 1.0, 2.0],
+  "anchor_strides": [4, 8, 16, 32, 64],
+
+  "rpn_head":
+  {
+    "first_model_folder": "examples/mobilenet_cudatest/first",
+    "use_sigmoid_cls": true,
+    "nms_each_level": false,
+    "nms_across_levels": true,
+    "num_cls": 2,
+    "rpn_drop_boxes_runoff_image": true,
+    "nms_pre": 2000,
+    "nms_post": 2000,
+    "nms_thr": 0.7,
+    "max_num": 2000,
+    "min_bbox_size": 0.0,
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [1.0, 1.0, 1.0, 1.0],
+    "rpn_network_output_name": [["506", "507"], ["510", "511"], ["514", "515"], ["518", "519"], ["522", "523"]]
+  },
+
+  "bbox_roi_extractor":
+  {
+    "type": "RoIAlign",
+    "out_size": 7,
+    "sample_num": 2,
+    "featmap_strides": [4, 8, 16, 32]
+  },
+
+  "bbox_head":
+  {
+    "second_model_folder": "examples/mobilenet_cudatest/second",
+    "bbox_head_output_name": ["cls_prob", "15"],
+    "shared_rpn_layer": ["496", "498", "500", "502"],
+    "iou_thr": 0.3,
+    "score_thr": 0.8,
+    "max_per_img": 100,
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [0.1, 0.1, 0.2, 0.2],
+    "rpn_drop_boxes_runoff_image": true
+  }
+}

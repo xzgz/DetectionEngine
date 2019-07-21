@@ -1,0 +1,57 @@
+{
+  "all_in_one": false,
+  "det_type": "two-stage",
+
+  "to_rgb": false,
+  "flip": false,
+  "size_divisor": -1,
+
+  "scale": [240, 320],
+  "resize_keep_ratio": true,
+  "inputimage_format": "bgr",
+  "image_mean": [103.53, 116.28, 123.675],
+  "image_std": [57.375, 57.12, 58.395],
+
+  "anchor_scales": [2, 4, 8, 16, 32],
+  "anchor_ratios": [0.5, 1.0, 2.0],
+  "anchor_strides": [32],
+
+  "rpn_head":
+  {
+    "first_model_folder": "examples/fasterrcnn_fclayer_cobjectflow/roialign/first",
+    "use_sigmoid_cls": true,
+    "nms_each_level": true,
+    "nms_across_levels": false,
+    "num_cls": 2,
+    "rpn_drop_boxes_runoff_image": true,
+    "nms_pre": 6000,
+    "nms_post": 1000,
+    "nms_thr": 0.7,
+    "max_num": 1000,
+    "min_bbox_size": 0.0,
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [1.0, 1.0, 1.0, 1.0],
+    "rpn_network_output_name": [["571", "572"]]
+  },
+
+  "bbox_roi_extractor":
+  {
+    "type": "RoIAlign",
+    "out_size": 7,
+    "sample_num": 2,
+    "featmap_strides": [32]
+  },
+
+  "bbox_head":
+  {
+    "second_model_folder": "examples/fasterrcnn_fclayer_cobjectflow/roialign/second",
+    "bbox_head_output_name": ["cls_prob", "15"],
+    "shared_rpn_layer": ["568"],
+    "iou_thr": 0.5,
+    "score_thr": 0.05,
+    "max_per_img": 100,
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [0.1, 0.1, 0.2, 0.2],
+    "rpn_drop_boxes_runoff_image": true
+  }
+}

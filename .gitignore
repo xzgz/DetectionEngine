@@ -1,0 +1,8 @@
+build*/*
+cmake*/*
+data/*
+.idea/*
+*.o
+*.so
+*.a
+

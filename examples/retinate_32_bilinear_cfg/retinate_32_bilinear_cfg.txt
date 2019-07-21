@@ -1,0 +1,32 @@
+{
+  "net_cfg":
+  {
+    "proto_txt_file": "examples/retinate_32_bilinear_cfg/rel.prototxt",
+    "model_param_file": "examples/retinate_32_bilinear_cfg/model.bin",
+    "rcnn_input_blob_names": ["537", "543", "549", "555", "561", "p2/rpn_cls_prob", "p3/rpn_cls_prob", "p4/rpn_cls_prob", "p5/rpn_cls_prob", "p6/rpn_cls_prob"],
+    "rcnn_feature_level_num": 5
+  },
+  "rcnn_head_cfg":
+  {
+    "num_classes": 2,
+    "in_channels": 32,
+    "feat_channels": 32,
+    "use_sigmoid_cls": true,
+    "use_focal_loss": false,
+    "anchor_base_sizes": "",
+    "anchor_scales": [8],
+    "anchor_ratios": [0.5, 1.0, 2.0],
+    "anchor_strides": [4, 8, 16, 32, 64],
+    "target_means": [0., 0., 0., 0.],
+    "target_stds": [1.0, 1.0, 1.0, 1.0]
+  },
+  "rcnn_proposal_cfg":
+  {
+    "nms_pre": 1000,
+    "score_thr": 0.5,
+    "iou_thr": 0.3,
+    "per_img_bbox_max_num": 100,
+    "min_bbox_size": 0.0
+  }
+}
+

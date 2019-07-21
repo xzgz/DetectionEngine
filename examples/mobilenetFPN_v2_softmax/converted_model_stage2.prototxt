@@ -1,0 +1,67 @@
+name: "converted_model_stage2"
+input: "0"
+input_shape {
+  dim: 1
+  dim: 8
+  dim: 7
+  dim: 7
+}
+layer {
+  name: "InnerProduct_1"
+  type: "InnerProduct"
+  bottom: "0"
+  top: "10"
+  inner_product_param {
+    num_output: 16
+    bias_term: true
+  }
+}
+layer {
+  name: "ReLU_2"
+  type: "ReLU"
+  bottom: "10"
+  top: "11"
+}
+layer {
+  name: "InnerProduct_3"
+  type: "InnerProduct"
+  bottom: "11"
+  top: "12"
+  inner_product_param {
+    num_output: 16
+    bias_term: true
+  }
+}
+layer {
+  name: "ReLU_4"
+  type: "ReLU"
+  bottom: "12"
+  top: "13"
+}
+layer {
+  name: "InnerProduct_5"
+  type: "InnerProduct"
+  bottom: "13"
+  top: "14"
+  inner_product_param {
+    num_output: 2
+    bias_term: true
+  }
+}
+layer {
+  name: "InnerProduct_6"
+  type: "InnerProduct"
+  bottom: "13"
+  top: "15"
+  inner_product_param {
+    num_output: 8
+    bias_term: true
+  }
+}
+
+layer {
+  name: "cls_prob"
+  type: "Softmax"
+  bottom: "14"
+  top: "cls_prob"
+}
