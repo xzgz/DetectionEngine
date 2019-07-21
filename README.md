@@ -1,5 +1,3 @@
-# Implement the inference process of ObjectFlow in C++.
-
 # Install:
 Before compile, we need to install the tools for the building of protobuf:
 ```shell
