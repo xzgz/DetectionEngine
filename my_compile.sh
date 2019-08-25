@@ -4,10 +4,12 @@ COBJECTFLOW_EXTERNAL_PATH=$PWD/../cobjectflow-external
 #COBJECTFLOW_EXTERNAL_PATH=/opt/matrix_dependencies
 BUILD_DIR=$1
 BUILD_TYPE=$2
+COMPILE_THREAD_NUM=$3
 
 echo "param 0: $0"
 echo "BUILD_DIR param 1: $1"
 echo "BUILD_TYPE param 2: $2"
+echo "compile with $COMPILE_THREAD_NUM threads."
 echo "Start build CObjectFlow..."
 if [ -d "$BUILD_DIR" ];
     then echo "Remove the previous building files..."
@@ -21,7 +23,6 @@ cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
 -DCAFFE_PATH=$COBJECTFLOW_EXTERNAL_PATH/caffe/install \
 -DJSON_PATH=$COBJECTFLOW_EXTERNAL_PATH/jsoncpp-1.8.4/install \
 -DCNPY_PATH=$COBJECTFLOW_EXTERNAL_PATH/cnpy/install
-make -j 8
-echo "Build CObjectFlow done."
-
+make -j $COMPILE_THREAD_NUM
+echo "Build DetectionEngine done."
 

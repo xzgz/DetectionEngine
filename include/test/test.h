@@ -20,13 +20,26 @@ using namespace cobjectflow;
 
 #define EPS 1e-6
 
-static double what_time_is_it_now()
-{
+static double what_time_is_it_now() {
   struct timeval time;
   if (gettimeofday(&time,NULL)){
     return 0;
   }
   return (double)time.tv_sec + (double)time.tv_usec * .000001;
+}
+
+static __inline__ double GetCurrentTime(double cpu_frequency) {
+  unsigned long long time;
+#if defined (__i386__)
+  unsigned long long int x;
+  __asm__ volatile("rdtsc":"=A"(x));
+  time = x;
+#elif defined (__x86_64__)
+  unsigned hi, lo;
+  __asm__ volatile("rdtsc":"=a"(lo), "=d"(hi));
+  time = ((unsigned long long) lo) | (((unsigned long long) hi) << 32);
+#endif
+  return ((double)time) / cpu_frequency;
 }
 
 class Box {

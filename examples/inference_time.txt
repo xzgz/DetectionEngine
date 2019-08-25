@@ -1,4 +1,8 @@
-create detector time,    inference time,    single_test_num: 40
+Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz:
+/**maskrcnn_cobjectflow**/
+/*4 threads*/
+(what_time_is_it_now, test_image_num=400, repeat_count=10)
+create detector time(s), inference time(s), single_test_num: 40
 0.239958  4.95266
 0.237936  4.93167
 0.278851  5.10791
@@ -9,9 +13,9 @@ create detector time,    inference time,    single_test_num: 40
 0.262994  5.31352
 0.301618  5.09701
 0.302  5.04018
-create detector average time: 0.271609 inference average time: 5.14064 fps: 7.78113
-
-create detector time,    inference time,    single_test_num: 40
+create detector average time: 0.271609s inference average time: 5.14064s fps: 7.78113
+(what_time_is_it_now, Debug, test_image_num=400, repeat_count=10)
+create detector time(s), inference time(s), single_test_num: 40
 0.382768  9.57524
 0.256653  9.44547
 0.262568  9.9428
@@ -22,10 +26,73 @@ create detector time,    inference time,    single_test_num: 40
 0.345111  9.60833
 0.407437  9.61732
 0.305579  9.5193
-create detector average time: 0.302556 inference average time: 9.6008 fps: 4.16632
+create detector average time: 0.302556s inference average time: 9.6008s fps: 4.16632
 
 
+Intel(R) Core(TM) i7-7800X CPU @ 3.50GHz:
+/**maskrcnn_cobjectflow**/
+/*single thread*/
+(what_time_is_it_now)
+create detector time(s), inference time(s), single_test_num: 100
+0.096612  15.9244
+0.103917  15.9378
+0.093101  15.9122
+create detector average time: 0.0978766s inference average time: 15.9248s fps: 6.27952
+(GetCurrentTime)
+create detector time(s), inference time(s), single_test_num: 100
+0.0929953  15.9689
+0.0846348  15.9752
+0.103039  15.9508
+create detector average time: 0.0935565s inference average time: 15.965s fps: 6.26371
+(GetCurrentTime, Debug)
+create detector time(s), inference time(s), single_test_num: 100
+0.110498  31.4154
+0.0956821  31.3249
+0.0947003  31.456
+create detector average time: 0.100293s inference average time: 31.3988s fps: 3.18484
+/*12 threads*/
+(what_time_is_it_now)
+create detector time,    inference time,    single_test_num: 1200
+3.91337  29.2233
+1.89195  30.1736
+1.83728  30.7143
+create detector average time: 2.54753 inference average time: 30.037 fps: 39.9507
+(GetCurrentTime, test_image_num=image_num, repeat_count=1)
+create detector time(s), inference time(s), single_test_num: 30498
+15.08155693  975.56642139
+create detector average time: 15.08155693s inference average time: 975.56642139s fps: 31.26183859
+Threshold 0.216 Precision 0.9900144338607788 Recall 0.9459964632987976
+/*6 threads*/
+(what_time_is_it_now)
+create detector time,    inference time,    single_test_num: 600
+0.626756  17.9581
+0.56642  18.2027
+0.612683  17.966
+create detector average time: 0.601953 inference average time: 18.0422 fps: 33.2553
 
+/**mobilenet_cudatest**/
+/*single thread*/
+(what_time_is_it_now)
+create detector time,    inference time,    single_test_num: 100
+0.104219  55.191
+0.0969601  55.1392
+0.102945  55.3215
+create detector average time: 0.101375 inference average time: 55.2172 fps: 1.81103
+(GetCurrentTime)
+create detector time(s), inference time(s), single_test_num: 100
+0.120865  55.2455
+0.105238  55.2589
+0.0930905  55.2364
+create detector average time: 0.106398s inference average time: 55.2469s fps: 1.81006
+
+/**fasterrcnn_fclayer_cobjectflow**/
+/*single thread*/
+(GetCurrentTime)
+create detector time(s), inference time(s), single_test_num: 100
+0.081562  53.2971
+0.0536968  53.0915
+0.0698935  53.0498
+create detector average time: 0.0683841s inference average time: 53.1461s fps: 1.8816
 
 
 

@@ -10,59 +10,85 @@ using std::ifstream;
 using std::getline;
 using namespace cobjectflow;
 
+static void InferenceMultiImage(const vector<string>& image_paths, Inference<float32_t>& inference,
+                                vector<vector<Box> > *results, vector<vector<float> > *scores) {
+  std::vector<std::shared_ptr<Proposal<float32_t> > > detection_result_list;
+  const bool_t rescale = true;
+  for (int32_t img_idx = 0; img_idx < image_paths.size(); ++img_idx) {
+    vector<Box> result;
+    vector<float32_t> score;
+    const string& image_path = image_paths[img_idx];
+    detection_result_list = inference.InferenceSingle(image_path, rescale);
+
+    Bbox<float32_t> box;
+    float32_t s;
+    int32_t label;
+    for (int i = 0; i < detection_result_list[0]->boxes.size(); ++i) {
+      box = detection_result_list[0]->boxes[i];
+      s = detection_result_list[0]->scores[i];
+      label = detection_result_list[0]->labels[i];
+      result.push_back(Box(box.x_tl, box.y_tl, box.x_br, box.y_br, label));
+      score.push_back(s);
+    }
+    (*results)[img_idx] = result;
+    (*scores)[img_idx] = score;
+
+//    cout << "img_idx: " << img_idx << "    " << image_path << endl;
+//    detection_result_list[0]->PrintBbox();
+//    show_det_result<float32_t>(image_path, *detection_result_list[0]);
+  }
+}
+
 int main() {
 //  string detection_json_file = "examples/mobilenetFPN_v2_softmax/mobilenetFPN_v2_softmax_cfg.txt";
 //  string detection_json_file = "examples/mobilenet_cudatest/mobilenet_cudatest_cfg.txt";
 //  string detection_json_file = "examples/maskrcnn_cobjectflow/maskrcnn_cobjectflow_cfg.txt";
 
 //  string detection_json_file = "examples/fasterrcnn_fclayer_cobjectflow/roialign/fasterrcnn_fclayer_cobjectflow.txt";
-  string detection_json_file = "examples/mobilenet_cudatest/mobilenet_cudatest.txt";
-//  string detection_json_file = "examples/maskrcnn_cobjectflow/maskrcnn_cobjectflow.txt";
-//  string val_annotation_file = "data/jingtai/VALannotation_ALL.json";
+//  string detection_json_file = "examples/mobilenet_cudatest/mobilenet_cudatest.txt";
+  string detection_json_file = "examples/maskrcnn_cobjectflow/maskrcnn_cobjectflow.txt";
+
+  string val_annotation_file = "data/jingtai/VALannotation_ALL.json";
 //  string val_annotation_file = "data/jingtai/VALannotation_RGB.json";
 //  string val_annotation_file = "data/jingtai/VALannotation_IR.json";
-  string val_annotation_file = "data/jingtai/VALannotation_Part.json";
+//  string val_annotation_file = "data/jingtai/VALannotation_Part.json";
   string data_root = "data/";
 
-  vector<string> all_image_paths;
-  vector<vector<Box> > all_gt_boxes;
-  int32_t val_image_num = ReadDataSet(val_annotation_file, data_root, &all_image_paths, &all_gt_boxes);
+  vector<string> all_image_path_temp;
+  vector<vector<Box> > all_gt_bbox_temp;
+  int image_num = ReadDataSet(val_annotation_file, data_root, &all_image_path_temp, &all_gt_bbox_temp);
+
+  int test_image_num = 300;
+  int repeat_count = 3;
+  int single_test_num = test_image_num / repeat_count;
+  vector<vector<Box> > all_results(single_test_num);
+  vector<vector<float> > all_scores(single_test_num);
 
   Inference<float32_t> inference(detection_json_file);
-  bool_t rescale = true;
+  double cpu_frequency = 3.5e9;
+  vector<double> inference_times;
+  for(int i = 0; i < repeat_count; ++i) {
+    vector<string> all_image_paths(all_image_path_temp.begin()+i*single_test_num, all_image_path_temp.begin()+(i+1)*single_test_num);
+    vector<vector<Box> > all_gt_boxes(all_gt_bbox_temp.begin()+i*single_test_num, all_gt_bbox_temp.begin()+(i+1)*single_test_num);
+    cout << "all_image_paths size: " << all_image_paths.size() << endl;
+    cout << "all_gt_boxes size: " << all_gt_boxes.size() << endl;
 
-  std::vector<std::shared_ptr<Proposal<float32_t> > > detection_result_list;
-  vector<string> cls_name = {"bg", "hand"};
-  vector<vector<Box> > all_results(val_image_num);
-  vector<vector<float32_t> > all_scores(val_image_num);
-  int32_t start_index = 7;
-//  int32_t start_index = 3;
-  int32_t end_index = val_image_num;
-  for (int32_t img_idx = start_index; img_idx < end_index; ++img_idx) {
-    vector<Box> results;
-    vector<float32_t> scores;
-    const string image_path = all_image_paths[img_idx];
-    cout << "img_idx: " << img_idx << "    " << image_path << endl;
-
-    detection_result_list = inference.InferenceSingle(image_path, rescale);
-
-    Bbox<float32_t> box;
-    float32_t score;
-    int32_t label;
-    for (int i = 0; i < detection_result_list[0]->boxes.size(); ++i) {
-      box = detection_result_list[0]->boxes[i];
-      score = detection_result_list[0]->scores[i];
-      label = detection_result_list[0]->labels[i];
-      results.push_back(Box(box.x_tl, box.y_tl, box.x_br, box.y_br, label));
-      scores.push_back(score);
-    }
-    all_results[img_idx] = results;
-    all_scores[img_idx] = scores;
-    detection_result_list[0]->PrintBbox();
-    show_det_result<float32_t>(image_path, *detection_result_list[0]);
+    double time = GetCurrentTime(cpu_frequency);
+    InferenceMultiImage(all_image_paths, inference, &all_results, &all_scores);
+    double inference_time = GetCurrentTime(cpu_frequency) - time;
+    cout << "inference time: " << inference_time << "s" << endl;
+    inference_times.push_back(inference_time);
   }
 
-  eval_recall_at_precision(all_gt_boxes, all_results, all_scores, cls_name, 0.99);
+  cout << "inference time(s), single_test_num: " << single_test_num << endl;
+  double sum_it = 0;
+  for (int i = 0; i < inference_times.size(); ++i) {
+    cout << inference_times[i] << endl;
+    sum_it += inference_times[i];
+  }
+  sum_it /= inference_times.size();
+  cout << " inference average time: " << sum_it << "s"
+       << " fps: " << single_test_num / sum_it << endl;
 
   return 0;
 }
